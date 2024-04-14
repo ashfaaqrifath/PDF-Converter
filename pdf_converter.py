@@ -3,7 +3,6 @@ import tkinter as tk
 import webbrowser
 from tkinter import *
 from tkinter import messagebox, filedialog
-from docx2pdf import convert
 
 
 def select_file():
@@ -11,20 +10,29 @@ def select_file():
     if file_path:
         file_entry.insert(0, file_path)
 
+
 def convert_file():
 
-    docx_file = file_entry.get()
+    input_file = file_entry.get()
 
     save_file = filedialog.asksaveasfilename(defaultextension=".pdf", filetypes=[("PDF files", "*.pdf")])
 
-    convert(docx_file, save_file)
-    messagebox.showinfo("Successfully converted", "Converted file to pdf")
+    if input_file.lower().endswith("docx"):
+        from docx2pdf import convert
 
+        convert(input_file, save_file)
+        messagebox.showinfo("Successfully converted", "Converted file to pdf")
+
+    elif input_file.lower().endswith("pptx"):
+        from pptxtopdf import convert
+
+        convert(input_file, save_file)
+        messagebox.showinfo("Successfully converted", "Converted file to pdf")
 
 
 root = tk.Tk()
 root.resizable(False, False)
-root.title("PDF Converter v1.1.0")
+root.title("PDF Converter v1.2.0")
 root.config(background="#a30000")
 
 
@@ -101,8 +109,6 @@ github_link.grid(row=7, column=3, pady=10)
 
 github_link.bind("<Button-1>", lambda e:
 callback("https://github.com/ashfaaqrifath/PDF-Converter"))
-
-
 
 
 root.mainloop()
